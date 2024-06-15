@@ -1,9 +1,10 @@
 import tvdb_v4_official
+import typer
 from pprint import pprint
 
 
-def main():
-    tvdb = tvdb_v4_official.TVDB("0c337cac-4ac3-4a65-944f-ffcb1eb29a17")
+def main(key: str):
+    tvdb = tvdb_v4_official.TVDB(key)
 
     query = input("Search: ")
 
@@ -21,10 +22,12 @@ def main():
         print(cnt + ") " + name + " " + year)
 
     selection = int(input("Selection: "))
+    # ONLY WORKS WITH SERIES CURRENTLY
     # HAVE TO CHECK ID FOR MOVIE/SERIES etc AND RETURN RESULT
+    # OR TYPE?
     sel_result = tvdb.get_series(results[selection]["tvdb_id"])
     pprint(sel_result)
 
 
 if __name__ == "__main__":
-    main()
+    typer.run(main)
