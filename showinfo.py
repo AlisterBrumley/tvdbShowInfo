@@ -1,17 +1,14 @@
 import tvdb_v4_official
+import typer
 from pprint import pprint
 
 
-def main():
-    # NEEDS KEY
-    tvdb = tvdb_v4_official.TVDB()
+def main(key: str, tvdb_id: int):
+    tvdb = tvdb_v4_official.TVDB(key)
 
-    series = tvdb.get_series_episodes(78500, "alternate")["episodes"]
-
-    for eps in series:
-        pprint(eps)
-        print("")
+    series = tvdb.get_series(tvdb_id, "default")
+    pprint(series)
 
 
 if __name__ == '__main__':
-    main()
+    typer.run(main)
