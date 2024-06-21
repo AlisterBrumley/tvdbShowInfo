@@ -16,31 +16,51 @@ def type_switch(db, type, id):
         case "person":
             return db.get_person(id)
     # THESE SHOULD NOT OCCUR, UNCOMMENT TO RE-ENABLE
-        # case "season":
-        #     return db.get_season(id)
-        # case "episode":
-        #     return db.get_episode(id)
-        # case "artwork":
-        #     return db.get_artwork(id)
-        # case "character":
-        #     return db.get_character(id)
+    # case "season":
+    #     return db.get_season(id)
+    # case "episode":
+    #     return db.get_episode(id)
+    # case "artwork":
+    #     return db.get_artwork(id)
+    # case "character":
+    #     return db.get_character(id)
 
 
-def main(key: str):
-    tvdb = tvdb_v4_official.TVDB(key)
-
+def search_query():
     query = input("Search: ")
 
     if not query:
-        print("no search term entered! exiting...")
-        exit(1)
+        return search_query()
+    else:
+        return query
 
+
+def select():
+    selection = input("Selection: ")
+
+    if not selection:
+        return select()
+
+    try:
+        return int(selection)
+    except ValueError:
+        return select()
+
+
+def main(key: str):
+    # init and auth
+    tvdb = tvdb_v4_official.TVDB(key)
+
+    # asking the user for the query
+    query = search_query()
+
+    # getting results from tvdb
     results = tvdb.search(query)
-
     if not results:
         print("no results! exiting...")
         exit(1)
 
+    # printing results
     for cnt, dict in enumerate(results):
         cnt = str(cnt)
         name = dict["name"]
@@ -50,21 +70,24 @@ def main(key: str):
         else:
             year = dict["year"]
 
-        year = dict["type"]
-
         print(cnt + ") " + name + " " + year)
 
-    # TODO MAKE FNC AND RECURSIVE RUN UNTIL SELECTION IN RANGE
-    selection = int(input("Selection: "))
+    # getting user selection
+    selection = select()
+    # TESTING ONLY, TO REMOVE WHEN COMPLETE
+    pprint(selection)
 
+    # getting basic info about selection
     sel_type = results[selection]["type"]
     sel_id = results[selection]["tvdb_id"]
 
     # TESTING ONLY, TO REMOVE WHEN COMPLETE
-    pprint(sel_type)
+    # pprint(sel_type)
 
+    # checking type and returning main info
     info = type_switch(tvdb, sel_type, sel_id)
 
+    # printing the info we got
     pprint(info)
 
 
