@@ -91,7 +91,12 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
     sel_id = results[selection]["tvdb_id"]
 
     # checking type and getting main info
-    info = type_switch(tvdb, sel_type, sel_id)
+    try:
+        info = type_switch(tvdb, sel_type, sel_id)
+    except Exception as e:
+        print("UNKNOWN ERROR OCCURED:")
+        print(e)
+        exit(1)
 
     # printing the info we got
     pprint(info)

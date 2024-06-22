@@ -6,7 +6,12 @@ from pprint import pprint
 def main(key: str, tvdb_id: int):
     tvdb = tvdb_v4_official.TVDB(key)
 
-    series = tvdb.get_series(tvdb_id, "default")
+    try:
+        series = tvdb.get_series(tvdb_id, "default")
+    except ValueError:
+        print("ID incorrect or not correct type!")
+        exit(1)
+
     pprint(series)
 
 
