@@ -1,5 +1,7 @@
 import tvdb_v4_official
 import typer
+from typing import Optional
+from typing_extensions import Annotated
 from pprint import pprint
 
 
@@ -10,7 +12,7 @@ def type_switch(db, type, id):
         case "company":
             return db.get_company(id)
         case "list":
-            return  # RE RUN SEARCH THROUGH LIST
+            return db.get_list(id)
         case "movie":
             return db.get_movie(id)
         case "person":
@@ -47,12 +49,13 @@ def select():
         return select()
 
 
-def main(key: str):
+def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
     # init and auth
     tvdb = tvdb_v4_official.TVDB(key)
 
     # asking the user for the query
-    query = search_query()
+    if query is None:
+        query = search_query()
 
     # getting results from tvdb
     results = tvdb.search(query)
@@ -84,7 +87,7 @@ def main(key: str):
     # TESTING ONLY, TO REMOVE WHEN COMPLETE
     # pprint(sel_type)
 
-    # checking type and returning main info
+    # checking type and getting main info
     info = type_switch(tvdb, sel_type, sel_id)
 
     # printing the info we got
