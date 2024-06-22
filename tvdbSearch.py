@@ -4,6 +4,7 @@ from typing import Optional
 from typing_extensions import Annotated
 from pprint import pprint
 
+
 # takes selection, checks typer and returns correct type info
 def type_switch(db, type, id):
     match type:
@@ -27,6 +28,7 @@ def type_switch(db, type, id):
     # case "character":
     #     return db.get_character(id)
 
+
 # user query
 def search_query():
     query = input("Search: ")
@@ -35,6 +37,7 @@ def search_query():
         return search_query()
     else:
         return query
+
 
 # user select
 def select(result_length):
