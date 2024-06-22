@@ -4,7 +4,7 @@ from typing import Optional
 from typing_extensions import Annotated
 from pprint import pprint
 
-
+# takes selection, checks typer and returns correct type info
 def type_switch(db, type, id):
     match type:
         case "series":
@@ -27,7 +27,7 @@ def type_switch(db, type, id):
     # case "character":
     #     return db.get_character(id)
 
-
+# user query
 def search_query():
     query = input("Search: ")
 
@@ -36,17 +36,23 @@ def search_query():
     else:
         return query
 
-
-def select():
+# user select
+def select(result_length):
     selection = input("Selection: ")
 
     if not selection:
-        return select()
+        return select(result_length)
 
+    # is int
     try:
-        return int(selection)
+        selection = int(selection)
     except ValueError:
-        return select()
+        return select(result_length)
+
+    if int(selection) >= result_length:
+        return select(result_length)
+
+    return selection
 
 
 def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
@@ -59,6 +65,7 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
 
     # getting results from tvdb
     results = tvdb.search(query)
+    res_len = len(results)
     if not results:
         print("no results! exiting...")
         exit(1)
@@ -76,16 +83,9 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
         print(cnt + ") " + name + " " + year)
 
     # getting user selection
-    selection = select()
-    # TESTING ONLY, TO REMOVE WHEN COMPLETE
-    pprint(selection)
-
-    # getting basic info about selection
+    selection = select(res_len)
     sel_type = results[selection]["type"]
     sel_id = results[selection]["tvdb_id"]
-
-    # TESTING ONLY, TO REMOVE WHEN COMPLETE
-    # pprint(sel_type)
 
     # checking type and getting main info
     info = type_switch(tvdb, sel_type, sel_id)
