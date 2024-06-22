@@ -1,5 +1,6 @@
 import tvdb_v4_official
 import typer
+import urllib.error
 from typing import Optional
 from typing_extensions import Annotated
 from pprint import pprint
@@ -60,14 +61,33 @@ def select(result_length):
 
 def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
     # init and auth
-    tvdb = tvdb_v4_official.TVDB(key)
+    try:
+        tvdb = tvdb_v4_official.TVDB(key)
+    except urllib.error.URLError as e:
+        print("NETWORK ERROR!")
+        print(e)
+        exit(1)
+    except Exception as e:
+        print("UNKNOWN ERROR OCCURED:")
+        print(e)
+        exit(1)
 
     # asking the user for the query
     if query is None:
         query = search_query()
 
     # getting results from tvdb
-    results = tvdb.search(query)
+    try:
+        results = tvdb.search(query)
+    except urllib.error.URLError as e:
+        print("NETWORK ERROR!")
+        print(e)
+        exit(1)
+    except Exception as e:
+        print("UNKNOWN ERROR OCCURED:")
+        print(e)
+        exit(1)
+
     res_len = len(results)
     if not results:
         print("no results! exiting...")
@@ -93,6 +113,10 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
     # checking type and getting main info
     try:
         info = type_switch(tvdb, sel_type, sel_id)
+    except urllib.error.URLError as e:
+        print("NETWORK ERROR!")
+        print(e)
+        exit(1)
     except Exception as e:
         print("UNKNOWN ERROR OCCURED:")
         print(e)
