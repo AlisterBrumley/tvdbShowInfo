@@ -14,7 +14,7 @@ def type_switch(db, type, id):
         case "company":
             return db.get_company(id)
         case "list":
-            return db.get_list(id)
+            return db.get_list_extended(id)
         case "movie":
             return db.get_movie(id)
         case "person":
@@ -59,6 +59,38 @@ def select(result_length):
     return selection
 
 
+def res_print(res):
+    for cnt, dict in enumerate(res):
+        cnt = str(cnt)
+        name = dict["name"]
+
+        # using .get because it returns None if None rather then raising exception
+        if not dict.get("year"):
+            year = "[Year Missing]"
+        else:
+            year = dict["year"]
+
+        print(cnt + ") " + name + " " + year)
+
+
+def list_print(db, list):
+    # need to create new list, containing get_'s to keep for selections
+    for cnt, dict in enumerate(list):
+        cnt = str(cnt)
+
+        if dict.get("seriesId"):
+            id = dict["seriesId"]
+            name = db.get_series(id)["name"]
+            # temp = db.get_series(id)
+        elif dict.get("movieId"):
+            id = dict["movieId"]
+            name = db.get_movie(id)["name"]
+            # temp = db.get_movie(id)
+
+        print(cnt + ") " + name)
+        # pprint(temp)
+
+
 def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
     # init and auth
     try:
@@ -94,16 +126,7 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
         exit(1)
 
     # printing results
-    for cnt, dict in enumerate(results):
-        cnt = str(cnt)
-        name = dict["name"]
-
-        if not dict.get("year"):
-            year = "[Year Missing]"
-        else:
-            year = dict["year"]
-
-        print(cnt + ") " + name + " " + year)
+    res_print(results)
 
     # getting user selection
     selection = select(res_len)
@@ -123,7 +146,14 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
         exit(1)
 
     # printing the info we got
-    pprint(info)
+    if sel_type != "list":
+        pprint(info)
+        exit(0)
+
+    # if a list, continue to print the list and allow selection within that
+    print("Selection is a list, contents as follows:")
+    list_contents = info[0]["entities"]
+    list_print(tvdb, list_contents)
 
 
 if __name__ == "__main__":
