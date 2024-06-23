@@ -7,7 +7,7 @@ def main(key: str, tvdb_id: int):
     tvdb = tvdb_v4_official.TVDB(key)
 
     try:
-        series = tvdb.get_series(tvdb_id, "default")
+        series = tvdb.get_movie(tvdb_id, "default")
     except ValueError:
         print("ID incorrect or not correct type!")
         exit(1)
@@ -15,5 +15,5 @@ def main(key: str, tvdb_id: int):
     pprint(series)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     typer.run(main)
