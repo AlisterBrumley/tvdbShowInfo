@@ -59,6 +59,7 @@ def select(result_length):
     return selection
 
 
+# prints search results
 def res_print(res):
     for cnt, dict in enumerate(res):
         cnt = str(cnt).zfill(2)
@@ -74,9 +75,8 @@ def res_print(res):
         print(cnt + ") " + year + " - " + type + " - " + name)
 
 
+# prints lists
 def list_print(db, list):
-    # need to print list description
-    # need to create new list, containing get_'s to keep for selections
     info_list = []
     for cnt, dict in enumerate(list):
         cnt = str(cnt)
@@ -161,9 +161,20 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
     # if a list, continue to print the list and allow selection within that
     print("Selection is a list, contents as follows:")
     list_contents = info[0]["entities"]
-    list_res = list_print(tvdb, list_contents)
+    try:
+        list_res = list_print(tvdb, list_contents)
+    except urllib.error.URLError as e:
+        print("NETWORK ERROR!")
+        print(e)
+        exit(1)
+    except Exception as e:
+        print("UNKNOWN ERROR OCCURED:")
+        print(e)
+        exit(1)
+
     list_len = len(list_res)
     list_sel = select(list_len)
+    
     pprint(list_res[list_sel])
 
 
