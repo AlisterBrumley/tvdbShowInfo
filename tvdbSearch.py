@@ -61,34 +61,42 @@ def select(result_length):
 
 def res_print(res):
     for cnt, dict in enumerate(res):
-        cnt = str(cnt)
+        cnt = str(cnt).zfill(2)
         name = dict["name"]
+        type = dict["type"]
 
         # using .get because it returns None if None rather then raising exception
         if not dict.get("year"):
-            year = "[Year Missing]"
+            year = "----"
         else:
             year = dict["year"]
 
-        print(cnt + ") " + name + " " + year)
+        print(cnt + ") " + year + " - " + type + " - " + name)
 
 
 def list_print(db, list):
+    # need to print list description
     # need to create new list, containing get_'s to keep for selections
+    info_list = []
     for cnt, dict in enumerate(list):
         cnt = str(cnt)
 
         if dict.get("seriesId"):
             id = dict["seriesId"]
-            name = db.get_series(id)["name"]
-            # temp = db.get_series(id)
+            info = db.get_series(id)
+            type = "series"
         elif dict.get("movieId"):
             id = dict["movieId"]
-            name = db.get_movie(id)["name"]
-            # temp = db.get_movie(id)
+            info = db.get_movie(id)
+            type = "movie"
 
-        print(cnt + ") " + name)
-        # pprint(temp)
+        info_list.append(info)
+        name = info["name"]
+        year = info["year"]
+
+        print(cnt + ") " + year + " - " + type + " - " + name)
+
+    return info_list
 
 
 def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
@@ -153,7 +161,10 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
     # if a list, continue to print the list and allow selection within that
     print("Selection is a list, contents as follows:")
     list_contents = info[0]["entities"]
-    list_print(tvdb, list_contents)
+    list_res = list_print(tvdb, list_contents)
+    list_len = len(list_res)
+    list_sel = select(list_len)
+    pprint(list_res[list_sel])
 
 
 if __name__ == "__main__":
