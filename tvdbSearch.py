@@ -79,7 +79,7 @@ def res_print(res):
 def list_print(db, list):
     info_list = []
     for cnt, dict in enumerate(list):
-        cnt = str(cnt)
+        cnt = str(cnt).zfill(2)
 
         if dict.get("seriesId"):
             id = dict["seriesId"]
@@ -174,7 +174,7 @@ def main(key: str, query: Annotated[Optional[str], typer.Argument()] = None):
 
     list_len = len(list_res)
     list_sel = select(list_len)
-    
+
     pprint(list_res[list_sel])
 
 
