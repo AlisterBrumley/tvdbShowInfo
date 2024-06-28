@@ -1,3 +1,4 @@
 .DS_store
 TVDBreference.py
 *.code-workspace
+dump/
