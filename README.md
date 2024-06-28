@@ -1,7 +1,7 @@
 ## tvdbshowinfo
 My test programs to learn the TVDB api
 
-### showmovie and showseries
+### showmovie, showseries, showext
 Reports info about movie/series. Requires `APIKey` and `ID` from TVDB as arguments
 
 ### tvdbSearch
