@@ -35,26 +35,45 @@ def main(key: str, tvdb_id: int):
     # #### SET OUT PATH
     # maybe define these all as part of a list and then iterate through writing them
     # , after made a tuple? why?
-    outSeries = outPath / "series.json"
-    outSEx = outPath / "series_extended.json"
-    outSEp = outPath / "series_episodes.json"
-    outSEpD = outPath / "series_episodes_default.json"
-    outSEpA = outPath / "series_episodes_alternate.json"
-    outSTr = outPath / "series_translation.json"
+    # outSeries = outPath / "series.json"
+    # outSEx = outPath / "series_extended.json"
+    # outSEp = outPath / "series_episodes.json"
+    # outSEpD = outPath / "series_episodes_default.json"
+    # outSEpA = outPath / "series_episodes_alternate.json"
+    # outSTr = outPath / "series_translation.json"
+    out_list = [
+        outPath / "series.json",
+        outPath / "series_extended.json",
+        outPath / "series_episodes.json",
+        # outPath / "series_episodes_default.json", 
+        outPath / "series_episodes_alternate.json",
+        # outPath / "series_translation.json", 
+    ]
 
     # #### GETTING INFO
-    series = tvdb.get_series(tvdb_id)
-    series_extended = tvdb.get_series_extended(tvdb_id)
-    series_episodes = tvdb.get_series_episodes(tvdb_id)
-    series_ep_def = tvdb.get_series_episodes(tvdb_id, "default")
-    series_ep_alt = tvdb.get_series_episodes(tvdb_id, "alternate")
+    # series = tvdb.get_series(tvdb_id)
+    # series_extended = tvdb.get_series_extended(tvdb_id)
+    # series_episodes = tvdb.get_series_episodes(tvdb_id)
+    # series_ep_def = tvdb.get_series_episodes(tvdb_id, "default")
+    # series_ep_alt = tvdb.get_series_episodes(tvdb_id, "alternate")
     # series_tranlation = tvdb.get_series_translation(tvdb_id, "english") # NEED TO FIND CORRECT STR
+    info_list = [
+        tvdb.get_series(tvdb_id),
+        tvdb.get_series_extended(tvdb_id),
+        tvdb.get_series_episodes(tvdb_id),
+        # tvdb.get_series_episodes(tvdb_id, "default"),  # Seems to be the same as above
+        tvdb.get_series_episodes(tvdb_id, "alternate"),
+        # tvdb.get_series_translation(tvdb_id, "english") # NEED TO FIND CORRECT STR
+    ]
 
     # #### OUTPUT INFO
     # outSeries.write_text(json.dumps(series, indent=4, ensure_ascii=False))
-    output(outSeries, series)
-    output(outSEx, series_extended)
-    output(outSEp, series_episodes)
+    # output(outSeries, series)
+    # output(outSEx, series_extended)
+    # output(outSEp, series_episodes)
+    # LIST OUTPUT
+    for (out_path, info) in zip(out_list, info_list):
+        output(out_path, info)
 
 
 if __name__ == "__main__":
