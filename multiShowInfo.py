@@ -45,9 +45,10 @@ def main(key: str, tvdb_id: int):
         outPath / "series.json",
         outPath / "series_extended.json",
         outPath / "series_episodes.json",
-        # outPath / "series_episodes_default.json", 
+        # outPath / "series_episodes_default.json",
         outPath / "series_episodes_alternate.json",
-        # outPath / "series_translation.json", 
+        outPath / "series_translation.json",
+        # outPath / "series_next_aired.json",
     ]
 
     # #### GETTING INFO
@@ -63,7 +64,8 @@ def main(key: str, tvdb_id: int):
         tvdb.get_series_episodes(tvdb_id),
         # tvdb.get_series_episodes(tvdb_id, "default"),  # Seems to be the same as above
         tvdb.get_series_episodes(tvdb_id, "alternate"),
-        # tvdb.get_series_translation(tvdb_id, "english") # NEED TO FIND CORRECT STR
+        tvdb.get_series_translation(tvdb_id, "eng"),
+        # tvdb.get_series_nextAired(tvdb_id),  # same data as series? check with currently airing show
     ]
 
     # #### OUTPUT INFO
@@ -72,7 +74,7 @@ def main(key: str, tvdb_id: int):
     # output(outSEx, series_extended)
     # output(outSEp, series_episodes)
     # LIST OUTPUT
-    for (out_path, info) in zip(out_list, info_list):
+    for out_path, info in zip(out_list, info_list):
         output(out_path, info)
 
 
