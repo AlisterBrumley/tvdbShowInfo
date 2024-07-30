@@ -4,7 +4,7 @@ from pprint import pprint
 
 
 def main(key: str, tvdb_id: int):
-    tvdb = tvdb_v4_official.TVDB()
+    tvdb = tvdb_v4_official.TVDB(key)
 
     try:
         series = tvdb.get_series(tvdb_id, "default")

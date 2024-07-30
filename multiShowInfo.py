@@ -45,7 +45,9 @@ def main(key: str, tvdb_id: int):
         # outPath / "seasons_extended.json",
         # outPath / "series_translation_alt.json",
         outPath / "episode.json",
-        outPath / "episode_extended.json"
+        outPath / "episode_extended.json",
+        outPath / "season2_ext_alt.json",
+        # outPath / "season2_tran.json",
     ]
 
     # #### GETTING INFO
@@ -62,6 +64,8 @@ def main(key: str, tvdb_id: int):
         # tvdb.get_series_translation(tvdb_id, "eng", "alternate"), # IS THERE A WAY TO GET ALT METADATA?
         tvdb.get_episode(9594346),
         tvdb.get_episode_extended(9594346),
+        tvdb.get_season_extended(2048071),
+        # tvdb.get_season_translation(2048071, "eng"),
     ]
 
     # #### OUTPUT INFO
